@@ -1,0 +1,1 @@
+для запуска сначала npm install затем npm start
