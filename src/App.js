@@ -23,11 +23,12 @@ function App() {
       id: Math.floor(Math.random() * 100),
       todo: todo,
     }
-
-    // add the todo to the list
-    setList([...list, newTodo])
-    // clear input box
-    setInput("")
+    if (todo != "") {
+      // add the todo to the list
+      setList([...list, newTodo])
+      // clear input box
+      setInput("")
+    }
   }
 
   const deleteTodo = (id) => {
@@ -45,8 +46,12 @@ function App() {
   }
 
   function updateStates() {
-    changeMode(true)
-    changeStateList([...list])
+    if (list.length > 0){
+      changeMode(true)
+      changeStateList([...list])
+    } else {
+      alert("Добавь хотя бы 1 пункт")
+    }
   }
 
   function startFight() {
@@ -66,29 +71,31 @@ function App() {
     }
   }
 
-  const reset =() => {
+  const reset = () => {
     setList([])
     changeStateList([])
     changeMode(false)
+    setTask1({id: 0, todo: ""})
+    setTask2({id: 0, todo: ""})
     setBest(null)
   }
 
   if (!is_game_mode && best == null) {
     return (
-      <div>
+      <div class="center">
         <h1>Выбиратор 3000</h1>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <button onClick={() => addTodo(input)}>Add</button>
-        <button onClick={() => updateStates()}>Start Choosing</button>
+        <button class="buttonchoose" onClick={() => addTodo(input)}>Добавить</button>
+        <button class="buttonchoose" onClick={() => updateStates()}>ВЫБРАТЬ!!!!</button>
         <ul>
           {list.map((todo) => (
-            <li key={todo.id}>
+            <li class="text" key={todo.id}>
               {todo.todo}
-              <button onClick={() => deleteTodo(todo.id)}>&times;</button>
+              <button class="buttondelete" onClick={() => deleteTodo(todo.id)}>&#10060;</button>
             </li>
           ))}
         </ul>
@@ -96,23 +103,19 @@ function App() {
     )
   } else if (is_game_mode && best == null) {
     return (
-      <div>
+      <div class="center">
         <h1>Выбери то что тебе нравится больше</h1>
-        <button onClick={() => deleteTodo(task1.id)}>{task1.todo}</button>
+        <button class="buttonchoose" onClick={() => deleteTodo(task1.id)}>{task1.todo}</button>
         <text>ПРОТИВ</text>
-        <button onClick={() => deleteTodo(task2.id)}>{task2.todo}</button>
+        <button class="buttonchoose" onClick={() => deleteTodo(task2.id)}>{task2.todo}</button>
       </div>
     )
   } else if (best != null){
     return (
-      <div>
+      <div class="center">
         <h1>Тебе точно нужно выбрать вот это!!!!</h1>
-        <button onClick={() => reset()}>Заново</button>
-        <ul>
-          <li>
-            {best.todo}
-          </li>
-        </ul>
+        <button class="buttonchoose" onClick={() => reset()}>Заново</button>
+        <h1>{best.todo}</h1>
       </div>
     )
   }
